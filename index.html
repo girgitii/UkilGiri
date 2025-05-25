@@ -874,9 +874,68 @@ code {
         width: 100%;
     }
 }
+
+/* Animated banner */
+.animated-banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 30px;
+    background-color: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 1000;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+
+.banner-text {
+    white-space: nowrap;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+    font-weight: 500;
+    animation: moveText 20s linear infinite;
+    padding: 0 20px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes moveText {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+/* Adjust other elements to account for the banner */
+.mobile-nav {
+    top: 30px;
+}
+
+.app-container {
+    padding-top: 30px;
+}
+
+@media (max-width: 768px) {
+    .app-container {
+        padding-top: 90px; /* 30px for banner + 60px for mobile nav */
+    }
+    
+    .sidebar {
+        top: 90px;
+        min-height: calc(100% - 90px);
+    }
+}
     </style>
 </head>
 <body>
+    <div class="animated-banner">
+        <div class="banner-text">এই ওয়েবসাইটটি বানিয়েছেন- সালাউদ্দিন মজুমদার। ©All rights reserved</div>
+    </div>
+    
     <div class="mobile-nav">
         <div class="mobile-nav-inner">
             <button class="mobile-menu-btn" id="mobileMenuBtn">
@@ -1356,6 +1415,8 @@ mobileNewChatBtn.addEventListener("click", () => {
     </script>
 </body>
 </html>
+
+
 
 
 
