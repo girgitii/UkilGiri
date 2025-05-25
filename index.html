@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UkilGiri</title>
+    <title>UkilGiri- উকিলগিরি</title>
     <style>
 @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap');
 
@@ -115,6 +115,16 @@ body {
     background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: colorShift 8s infinite alternate-reverse;
+}
+
+.app-title h1 .bangla-title {
+    font-size: 24px;
+    margin-left: 5px;
+    background: linear-gradient(135deg, #ffffff, #e0e0e0);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    opacity: 0.9;
 }
 
 .app-title h1::after {
@@ -781,6 +791,22 @@ code {
     -webkit-text-fill-color: transparent;
 }
 
+.mobile-logo h1 .bangla-title-mobile {
+    font-size: 18px;
+    margin-left: 3px;
+    background: linear-gradient(135deg, #ffffff, #e0e0e0);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+    .bangla-title-mobile {
+        font-size: 16px;
+    }
+}
+
 .mobile-new-chat {
     background: var(--primary-gradient);
     border: none;
@@ -946,7 +972,7 @@ code {
                 </svg>
             </button>
             <div class="mobile-logo">
-                <h1><span class="ukil">Ukil</span><span class="giri">Giri</span></h1>
+                <h1><span class="ukil">Ukil</span><span class="giri">Giri</span><span class="bangla-title-mobile">- উকিলগিরি</span></h1>
             </div>
             <button class="mobile-new-chat" id="mobileNewChatBtn">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -962,7 +988,7 @@ code {
     <div class="app-container">
         <aside class="sidebar">
             <div class="app-title">
-                <h1><span class="ukil">Ukil</span><span class="giri">Giri</span></h1>
+                <h1><span class="ukil">Ukil</span><span class="giri">Giri</span><span class="bangla-title">- উকিলগিরি</span></h1>
             </div>
             <div class="new-chat">
                 <button id="newChatBtn">+ নতুন আলোচনা</button>
@@ -985,7 +1011,7 @@ code {
                     </button>
                 </div>
                 <div class="disclaimer">
-                    UkilGiri সাধারণ আইনি তথ্য প্রদান করে। এটি একজন আইনজীবীর পরামর্শের বিকল্প নয়। জরুরি পরিস্থিতিতে, অনুগ্রহ করে একজন যোগ্য আইনজীবীর সাথে যোগাযোগ করুন।
+                    UkilGiri- উকিলগিরি সাধারণ আইনি তথ্য প্রদান করে। এটি একজন আইনজীবীর পরামর্শের বিকল্প নয়। জরুরি পরিস্থিতিতে, অনুগ্রহ করে একজন যোগ্য আইনজীবীর সাথে যোগাযোগ করুন।
                 </div>
             </div>
         </main>
@@ -1036,7 +1062,7 @@ function addWelcomeMessage() {
     const welcomeDiv = document.createElement("div");
     welcomeDiv.classList.add("welcome-message");
     welcomeDiv.innerHTML = `
-        <h2>UkilGiri-তে স্বাগতম</h2>
+        <h2>UkilGiri- উকিলগিরি-তে স্বাগতম</h2>
         <p>আমি আপনাকে বাংলাদেশের যেকোনো সাধারণ আইনি তথ্য এবং প্রাথমিক দিকনির্দেশনা প্রদান করতে পারি। উদাহরণস্বরূপ, আপনি জিজ্ঞাসা করতে পারেন:</p>
         <ul>
             <li>"আমার ল্যান্ডলর্ড আমার জামানত ফেরত দিচ্ছে না, আমি কী করতে পারি?"</li>
@@ -1415,6 +1441,12 @@ mobileNewChatBtn.addEventListener("click", () => {
     </script>
 </body>
 </html>
+
+
+
+
+
+
 
 
 
