@@ -1102,24 +1102,27 @@ async function handleUserInput() {
 
 User question: "${message}"
 
-Please provide a detailed and easy-to-understand answer in Bengali language with the following priorities:
-1. HIGHEST PRIORITY: Reference relevant sections from the Constitution of Bangladesh when applicable - ALWAYS include article numbers and direct quotes when referencing the Constitution
-2. Include EXTENSIVE citations to specific laws, acts, and legal precedents - mention section numbers, act names, and years
-3. For each legal point, provide the exact reference (e.g., "According to Section 54 of the Code of Criminal Procedure, 1898...")
-4. Explain legal concepts in simple terms that a non-lawyer can understand
-5. Provide practical guidance on what steps the person might take
-6. Use bullet points and clear organization for complex information
-7. Include both the legal perspective and practical real-world considerations
+Please provide a detailed and easy-to-understand answer with the following priorities:
+1. HIGHEST PRIORITY: ALWAYS RESPOND IN PURE BENGALI LANGUAGE ONLY. NEVER USE ANY ENGLISH OR BANGLISH WORDS. Use Bengali words for all concepts, including legal terms.
+2. Reference relevant sections from the Constitution of Bangladesh when applicable - include article numbers when referencing the Constitution
+3. Include citations to specific laws, acts, and legal precedents - mention section numbers, act names, and years
+4. For each legal point, provide the exact reference
+5. Explain legal concepts in simple terms that a non-lawyer can understand
+6. Provide practical guidance on what steps the person might take
+7. Use bullet points and clear organization for complex information
+8. Include both the legal perspective and practical real-world considerations
 
-Your response MUST be rich with specific legal references while remaining accessible. When citing laws:
-- For constitutional provisions: "Article X of the Constitution of Bangladesh states..."
-- For statutory laws: "Section Y of the [Law Name] Act, [Year] provides that..."
-- For case law: "In the case of [Case Name], the court held that..."
+Your response MUST be rich with specific legal references while remaining accessible.
 
-Make your response comprehensive but accessible, avoiding complex legal jargon when possible. When legal terms are necessary, explain them clearly.`;
+REMEMBER: ALWAYS RESPOND IN PURE BENGALI LANGUAGE ONLY. NEVER USE ANY ENGLISH OR BANGLISH WORDS. The only exceptions are for proper nouns, law names, and section numbers that cannot be translated.`;
 
         // Get response
         let legalResponse = await fetchAIResponse(legalPrompt);
+
+        // Check if response contains too much English and warn if needed
+        if (containsTooMuchEnglish(legalResponse)) {
+            legalResponse = await fetchAIResponse(`${legalPrompt}\n\nYour previous response contained too much English. Please rewrite your answer ONLY in Bengali language. Do not use any English words except for proper nouns, law names, and section numbers.`);
+        }
 
         // Remove loading indicator
         removeLoading(loadingId);
@@ -1398,8 +1401,8 @@ function containsTooMuchEnglish(text) {
     // Count total words
     const totalWordCount = text.split(/\s+/).length;
 
-    // If more than 5% of words are English, consider it too much (stricter threshold)
-    return (englishWordCount / totalWordCount) > 0.05;
+    // If more than 2% of words are English, consider it too much (very strict threshold)
+    return (englishWordCount / totalWordCount) > 0.02;
 }
 
 // Function to convert Latin numerals to Bengali numerals
@@ -1441,6 +1444,8 @@ mobileNewChatBtn.addEventListener("click", () => {
     </script>
 </body>
 </html>
+
+
 
 
 
