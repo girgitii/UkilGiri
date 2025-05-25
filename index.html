@@ -366,6 +366,7 @@ body {
     justify-content: center;
     font-weight: bold;
     box-shadow: var(--shadow-sm);
+    color: white;
 }
 
 .user-avatar {
@@ -374,6 +375,12 @@ body {
 
 .ai-avatar {
     background: var(--primary-gradient);
+}
+
+.avatar svg {
+    width: 24px;
+    height: 24px;
+    stroke: white;
 }
 
 .message-content {
@@ -590,6 +597,24 @@ code {
 .message-content p {
     margin-bottom: 10px;
     line-height: 1.6;
+}
+
+.bullet-point {
+    position: relative;
+    padding-left: 5px;
+    margin-bottom: 12px;
+}
+
+.numbered-point {
+    position: relative;
+    padding-left: 5px;
+    margin-bottom: 12px;
+}
+
+.numbered-point .number {
+    font-weight: 600;
+    color: var(--accent-color);
+    margin-right: 5px;
 }
 
 /* 3D Loading Animation */
@@ -987,12 +1012,26 @@ async function handleUserInput() {
     const loadingId = showLoading();
 
     try {
-        // Simplified prompt to get a direct response
-        const legalPrompt = `You are a legal assistant AI specializing in Bangladesh law.
+        // Enhanced prompt with constitutional focus and detailed guidance
+        const legalPrompt = `You are UkilGiri, a legal assistant AI specializing in Bangladesh law.
 
 User question: "${message}"
 
-Please provide a detailed answer in Bengali language. Include relevant legal information, references to applicable laws, and practical guidance.`;
+Please provide a detailed and easy-to-understand answer in Bengali language with the following priorities:
+1. HIGHEST PRIORITY: Reference relevant sections from the Constitution of Bangladesh when applicable - ALWAYS include article numbers and direct quotes when referencing the Constitution
+2. Include EXTENSIVE citations to specific laws, acts, and legal precedents - mention section numbers, act names, and years
+3. For each legal point, provide the exact reference (e.g., "According to Section 54 of the Code of Criminal Procedure, 1898...")
+4. Explain legal concepts in simple terms that a non-lawyer can understand
+5. Provide practical guidance on what steps the person might take
+6. Use bullet points and clear organization for complex information
+7. Include both the legal perspective and practical real-world considerations
+
+Your response MUST be rich with specific legal references while remaining accessible. When citing laws:
+- For constitutional provisions: "Article X of the Constitution of Bangladesh states..."
+- For statutory laws: "Section Y of the [Law Name] Act, [Year] provides that..."
+- For case law: "In the case of [Case Name], the court held that..."
+
+Make your response comprehensive but accessible, avoiding complex legal jargon when possible. When legal terms are necessary, explain them clearly.`;
 
         // Get response
         let legalResponse = await fetchAIResponse(legalPrompt);
@@ -1023,8 +1062,22 @@ function addMessage(text, sender) {
     const avatar = document.createElement("div");
     avatar.classList.add("avatar", `${sender}-avatar`);
 
-    // Add avatar content (could be an image or initial)
-    avatar.textContent = sender === "user" ? "আ" : "AI";
+    // Add relevant icons instead of text
+    if (sender === "user") {
+        avatar.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>';
+    } else {
+        // Classic scales of justice icon for AI
+        avatar.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 3L4 9v2l8-6 8 6V9z"></path>
+                <path d="M4 11v1a8 8 0 0 0 16 0v-1"></path>
+                <path d="M8 15a4 4 0 0 0 8 0"></path>
+                <line x1="12" y1="3" x2="12" y2="21"></line>
+                <circle cx="6" cy="11" r="2"></circle>
+                <circle cx="18" cy="11" r="2"></circle>
+            </svg>
+        `;
+    }
 
     const messageContent = document.createElement("div");
     messageContent.classList.add("message-content");
@@ -1040,17 +1093,39 @@ function addMessage(text, sender) {
 }
 
 function formatMessageText(text) {
-    // First, replace markdown-style bold with HTML bold
+    // First handle bullet points at the beginning of lines
+    let lines = text.split('\n');
+    let formattedLines = lines.map(line => {
+        // Replace bullet points (•, *, -) at the beginning of lines with icons
+        if (line.trim().match(/^[•\*\-]\s+/)) {
+            return line.replace(/^([•\*\-])\s+(.*)$/, '<p class="bullet-point">⚖️ $2</p>');
+        }
+        return line;
+    });
+    
+    text = formattedLines.join('\n');
+    
+    // Now handle other formatting
+    // Replace markdown-style bold with HTML bold
     text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
-    // Replace single asterisks with HTML emphasis
-    text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    // Replace single asterisks with HTML emphasis (only for emphasis, not bullet points)
+    text = text.replace(/\b\*(.*?)\*\b/g, '<em>$1</em>');
+    
+    // Replace numbered lists with styled numbers
+    text = text.replace(/^(\d+)\.\s+(.*?)$/gm, '<p class="numbered-point"><span class="number">$1.</span> $2</p>');
 
-    // Convert text to paragraphs
+    // Convert text to paragraphs (for lines that aren't already converted)
     const paragraphs = text.split('\n').filter(p => p.trim() !== '');
+    const formattedParagraphs = paragraphs.map(p => {
+        if (!p.startsWith('<p')) {
+            return `<p>${p}</p>`;
+        }
+        return p;
+    }).join('');
 
     // Return the formatted paragraphs
-    return paragraphs.map(p => `<p>${p}</p>`).join('');
+    return formattedParagraphs;
 }
 
 function showLoading() {
@@ -1281,5 +1356,18 @@ mobileNewChatBtn.addEventListener("click", () => {
     </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
